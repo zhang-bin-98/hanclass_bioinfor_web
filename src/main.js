@@ -1,4 +1,12 @@
-import { createApp } from 'vue'
+import * as Vue from 'vue'
 import App from './App.vue'
+// axios
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+// naive ui 
+import 'vfonts/FiraCode.css'
 
-createApp(App).mount('#app')
+const app = Vue.createApp(App)
+app.mount('#app')
+app.use(VueAxios, axios)
+app.use(naive)
