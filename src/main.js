@@ -5,8 +5,11 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 // naive ui 
 import 'vfonts/FiraCode.css'
+// router
+import router from './router'
 
 const app = Vue.createApp(App)
-app.mount('#app')
 app.use(VueAxios, axios)
-app.use(naive)
+app.use(router)
+// app.use(naive)
+app.mount('#app')

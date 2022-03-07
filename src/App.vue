@@ -1,21 +1,23 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+    <n-layout position="absolute">
+        <n-layout-header bordered>颐和园路</n-layout-header>
+        <!-- <n-layout has-sider>
+            <n-layout-sider content-style="padding: 24px;">海淀桥</n-layout-sider>
+            <n-layout>
+                <n-layout-content content-style="padding: 24px;">平山道</n-layout-content>
+                <n-layout-footer>成府路</n-layout-footer>
+            </n-layout>
+        </n-layout> -->
+        <router-view></router-view>
+    </n-layout>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<script setup>
+import { reactive } from 'vue'
+
+const state = reactive({
+    user: null,
+    token: null
+})
+
+</script>

@@ -1,7 +1,26 @@
-# Vue 3 + Vite
+# 国科大春季学期 实用生物信息学2 课程设计（前端）
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## TODO
 
-## Recommended IDE Setup
+1. `axios` API 封装
+    [例子](https://blog.csdn.net/qq_45970524/article/details/114264507)
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+2. 确定状态管理方式
+    `this.$root`/全局总线/`reactive`API
+
+3. 是否需要使用`tailwind css`?
+
+## 目前计划
+
++ `BaseHome.vue`: 主页
++ `Base404.vue`: 
++ `GeneList.vue`: 基因列表，数据可视化，基因查找
++ `GeneDetail.vue`: 基因细节查看
+
++ `GeneUpload.vue`: 基因上传
++ `UserLogin.vue`: 用户登录
++ `UserMessage.vue`: 用户信息(列表)
+
+## 一些借鉴
+
++ [文件组织](https://www.cnblogs.com/zhuhuoxingguang/p/11504396.html) 
