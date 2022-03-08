@@ -2,13 +2,8 @@
 
 ## TODO
 
-1. `axios` API 封装
-    [例子](https://blog.csdn.net/qq_45970524/article/details/114264507)
-
-2. 确定状态管理方式
-    `this.$root`/全局总线/`reactive`API
-
-3. 是否需要使用`tailwind css`?
+1. 是否需要使用`tailwind css`?
+2. 基因信息可视化详情
 
 ## 目前计划
 
