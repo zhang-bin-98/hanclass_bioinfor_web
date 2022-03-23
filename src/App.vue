@@ -2,9 +2,11 @@
     <n-layout position="absolute">
         <n-message-provider>
             <Header></Header>
-            
         </n-message-provider>
-        <router-view></router-view>
+        <n-layout-content>
+            <router-view></router-view>
+        </n-layout-content>
+        <n-layout-footer>成府路</n-layout-footer>
     </n-layout>
 </template>
 
