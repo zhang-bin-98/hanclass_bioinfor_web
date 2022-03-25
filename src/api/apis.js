@@ -20,8 +20,8 @@ export const userCreate = (data) => {
 }
 // 用户列表(信息)
 export const userList = (user_id = null) => {
-    // console.log(data)
-    return service.get(user_id? `${userUrl}/${user_id}`: userUrl)
+    // console.log(user_id)
+    return service.get(user_id? `${userUrl}/${user_id}` : userUrl)
 }
 // 更新(修改)用户信息
 // 删除用户

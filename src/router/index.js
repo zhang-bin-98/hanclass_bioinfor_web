@@ -6,7 +6,7 @@ const NotFound = () => import("@/pages/Base404.vue")
 const UserLogin = () => import("@/pages/UserLogin.vue")
 const UserMessage = () => import("@/pages/UserMessage.vue")
 
-// const GeneList = () => import("@/pages/GeneList.vue")
+const GeneList = () => import("@/pages/GeneList.vue")
 // const GeneDetail = () => import("@/pages/GeneDetail.vue")
 // const GeneUpload = () => import("@/pages/GeneUpload.vue")
 
@@ -32,6 +32,11 @@ const routes = [
         component: UserMessage
     },
     // gene
+    {
+        path: "/GeneList",
+        name: "GeneList",
+        component: GeneList
+    },
     // 404
     { 
         path: '/:pathMatch(.*)*',
