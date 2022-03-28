@@ -14,9 +14,9 @@ export default defineConfig({
       sassVariables: 'src/quasar-variables.sass'
     })
   ],
+  base:'./',
+
   server: {
-    // hmr: true, //开启热更新
-    // open:true,
     watch: {
       usePolling: true
     },
@@ -29,7 +29,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
        }
-      
     }
   },
   resolve: {

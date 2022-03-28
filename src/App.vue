@@ -12,11 +12,7 @@
       "
     >
       <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="gene.svg" />
-          </q-avatar>2019中国新冠肺炎序列数据库
-        </q-toolbar-title>
+        <q-toolbar-title>2019中国新冠肺炎序列数据库</q-toolbar-title>
 
         <q-space />
 

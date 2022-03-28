@@ -19,3 +19,4 @@
 ## 一些借鉴
 
 + [文件组织](https://www.cnblogs.com/zhuhuoxingguang/p/11504396.html) 
++ [跨域](https://zhuanlan.zhihu.com/p/274238013)

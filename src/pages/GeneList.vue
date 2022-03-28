@@ -442,7 +442,6 @@ onMounted(() => {
             selectItems.value = res.data
         })
         .catch((err) => {
-            loading.value = false
             console.log(err)
             $q.notify({
                 message: '获取失败,请重试！',

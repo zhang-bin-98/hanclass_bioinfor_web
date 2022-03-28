@@ -1,7 +1,10 @@
 
 import axios from 'axios'
 
-let baseURL = '/api'// '10.1.70.10/students/202128010315003/tp5/public'
+// https://zhuanlan.zhihu.com/p/274238013
+// '10.1.70.10/students/202128010315003/tp5/public'
+// let baseURL = '/api' // 开发环境
+let baseURL ='tp5/public' // 生产环境
 let token = null;
 
 

@@ -40,6 +40,10 @@ export const geneList = (params = null /* 筛选参数 */) => {
 export const geneSummary = () => {
     return service.get(`${geneUrl}/summary`)
 }
+// 基因条目的数量
+export const geneCount = () => {
+    return service.get(`${geneUrl}/count`)
+}
 // 添加基因信息
 export const geneCreate = (data) => {
     // console.log(data)
