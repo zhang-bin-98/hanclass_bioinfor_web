@@ -1,0 +1,149 @@
+[
+    {
+        "name": "virus_strain_name",
+        "label": "病毒株名",
+        "field": "virus_strain_name",
+        "align": "left",
+        "sortable": true,
+        "type": "text"
+    },
+    {
+        "name": "accession_id",
+        "label": "序列号",
+        "field": "accession_id",
+        "align": "left",
+        "sortable": true,
+        "pattern": "require",
+        "type": "text"
+    },
+    {
+        "name": "data_source",
+        "label": "数据来源",
+        "field": "data_source",
+        "align": "left",
+        "sortable": true,
+        "type": "selection"
+    },
+    {
+        "name": "related_id",
+        "label": "相关ID",
+        "field": "related_id",
+        "align": "left",
+        "sortable": true,
+        "type": "text"
+    },
+    {
+        "name": "lineage",
+        "label": "谱系",
+        "field": "lineage",
+        "align": "left",
+        "sortable": true,
+        "type": "selection"
+    },
+    {
+        "name": "nuc_completeness",
+        "label": "序列完整度",
+        "field": "nuc_completeness",
+        "align": "left",
+        "sortable": true,
+        "pattern": "High|Low",
+        "type": "selection"
+    },
+    {
+        "name": "sequence_length",
+        "label": "序列长度",
+        "field": "sequence_length",
+        "align": "left",
+        "sortable": true,
+        "type": "text"
+    },
+    {
+        "name": "sequence_quality",
+        "label": "序列质量",
+        "field": "sequence_quality",
+        "align": "left",
+        "sortable": true,
+        "type": "selection"
+    },
+    {
+        "name": "quality_assessment",
+        "label": "质量评估",
+        "field": "quality_assessment",
+        "align": "left",
+        "sortable": true,
+        "pattern": "字段格式：*/*/*/*/*"
+    },
+    {
+        "name": "host",
+        "label": "宿主",
+        "field": "host",
+        "align": "left",
+        "sortable": true,
+        "type": "selection"
+    },
+    {
+        "name": "sample_collection_date",
+        "label": "采样日期",
+        "field": "sample_collection_date",
+        "align": "left",
+        "sortable": true,
+        "pattern": "Y-m-d H:i:s",
+        "type": "date"
+    },
+    {
+        "name": "location",
+        "label": "采样地点",
+        "field": "location",
+        "align": "left",
+        "sortable": true,
+        "type": "selection"
+    },
+    {
+        "name": "originating_lab",
+        "label": "样本提供单位",
+        "field": "originating_lab",
+        "align": "left",
+        "type": "text"
+    },
+    {
+        "name": "submission_date",
+        "label": "提交时间",
+        "field": "submission_date",
+        "align": "left",
+        "sortable": true,
+        "pattern": "Y-m-d",
+        "type": "date"
+    },
+    {
+        "name": "submitting_lab",
+        "label": "数据递交单位",
+        "field": "submitting_lab",
+        "align": "left",
+        "type": "text"
+    },
+    {
+        "name": "create_time",
+        "label": "发布时间",
+        "field": "create_time",
+        "align": "left",
+        "sortable": true,
+        "pattern": "Y-m-d H:i:s",
+        "type": "date"
+    },
+    {
+        "name": "last_update_time",
+        "label": "更新时间",
+        "field": "last_update_time",
+        "align": "left",
+        "sortable": true,
+        "pattern": "Y-m-d H:i:s",
+        "type": "date"
+    },
+    {
+        "name": "action",
+        "label": "操作",
+        "field": "action",
+        "align": "center",
+        "pattern": "action"
+    }
+]

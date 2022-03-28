@@ -21,7 +21,7 @@ export const userCreate = (data) => {
 // 用户列表(信息)
 export const userList = (user_id = null) => {
     // console.log(user_id)
-    return service.get(user_id? `${userUrl}/${user_id}` : userUrl)
+    return service.get(user_id ? `${userUrl}/${user_id}` : userUrl)
 }
 // 更新(修改)用户信息
 // 删除用户
@@ -33,13 +33,12 @@ export const userDelete = (user_id) => {
 /****************** 基因数据管理 **********************/
 // 基因列表
 export const geneList = (params = null /* 筛选参数 */) => {
-    // console.log(data)
-    return service.get(geneUrl, params)
+    console.log(params)
+    return service.get(geneUrl, { params })
 }
-// 详细信息
-export const geneDetail = (gene_id = null) => {
-    // console.log(data)
-    return service.get(`${geneUrl}/${gene_id}`)
+// 基因条目的集合查询
+export const geneSummary = () => {
+    return service.get(`${geneUrl}/summary`)
 }
 // 添加基因信息
 export const geneCreate = (data) => {

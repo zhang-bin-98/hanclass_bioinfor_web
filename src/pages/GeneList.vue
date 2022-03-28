@@ -1,7 +1,6 @@
 <template>
     <q-page class="q-pa-md row items-start justify-center q-gutter-md bg-grey-2">
         <!-- 搜索框 -->
-
         <q-card flat class="col-2">
             <q-tabs
                 v-model="tab"
@@ -21,90 +20,119 @@
             <q-tab-panels v-model="tab" animated>
                 <!-- 全局搜索 -->
                 <q-tab-panel name="query">
-                    <q-form @submit="onSearch" @reset="query = null" class="q-pt-md">
-                        <q-input
-                            filled
-                            lazy-rules
-                            label="请输入查询内容"
-                            class="full-width"
-                            color="secondary"
-                            v-model="query"
-                            :rules="[val => val && val.length > 0 || '请输入内容']"
-                        />
-                        <q-btn-group spread flat class="q-mt-md">
-                            <q-btn outline type="submit" color="secondary" label="搜索" />
-                            <q-btn outline type="reset" color="secondary" label="重置" />
-                        </q-btn-group>
-                    </q-form>
+                    <q-input
+                        filled
+                        lazy-rules
+                        clearable
+                        clear-icon="close"
+                        label="请输入查询内容"
+                        class="full-width"
+                        color="secondary"
+                        v-model="filter"
+                    />
                 </q-tab-panel>
 
                 <!-- 高级搜索 -->
                 <q-tab-panel name="advance">
-                    <div class="text-h6">开发中</div>
+                    <q-form @submit="onSubmit" @reset="onReset">
+                        <div
+                            class="q-pb-sm"
+                            v-for="k of columns
+                            .filter(i => visibleColumns.includes(i.name))"
+                        >
+                            <q-input
+                                v-if="k.type == 'text'"
+                                dense
+                                lazy-rules
+                                clearable
+                                clear-icon="close"
+                                :label="k.label"
+                                :type="k.type"
+                                class="full-width"
+                                color="secondary"
+                                v-model="advace[k.name]"
+                            />
+                            <q-input
+                                v-else-if="k.type == 'date'"
+                                dense
+                                lazy-rules
+                                mask="####-##-##"
+                                clearable
+                                clear-icon="close"
+                                color="secondary"
+                                class="full-width"
+                                :hint="k.label"
+                                :type="k.type"
+                                v-model="advace[k.name]"
+                            />
+                            <q-select
+                                v-else-if="k.type == 'selection'"
+                                dense
+                                lazy-rules
+                                clearable
+                                color="secondary"
+                                clear-icon="close"
+                                v-model="advace[k.name]"
+                                :options="selectItems[k.name]"
+                                :label="k.label"
+                            />
+                        </div>
+                        <!-- 按钮 -->
+                        <q-btn-group class="justify-center" spread flat>
+                            <q-btn
+                                outline
+                                label="检索"
+                                type="submit"
+                                color="secondary"
+                                class="text-center"
+                            />
+                            <q-btn
+                                outline
+                                label="重置"
+                                type="reset"
+                                color="secondary"
+                                class="text-center"
+                            />
+                        </q-btn-group>
+                    </q-form>
                 </q-tab-panel>
             </q-tab-panels>
-
-            <q-separator />
-
-            <q-card-section>
-                <div class="text-body1 text-center">上传基因</div>
-            </q-card-section>
-
-            <q-btn-group spread flat class="q-mx-md q-mb-md">
-                <q-btn outline color="secondary" label="上传" />
-                <q-btn outline color="secondary" label="批量上传" />
-            </q-btn-group>
-
-            <!-- 其他 -->
-            <q-card flat class="q-pa-md col-2">
-                <pre>{{ JSON.stringify({ lastPage, nextPage, pagination }, null, 2) }}</pre>
-            </q-card>
         </q-card>
 
         <!-- 数据表 -->
         <q-card flat class="q-pa-md col-9">
             <q-table
-                title="基因数据"
+                title="序列数据"
                 class="my-sticky-dynamic"
                 :rows="rows"
                 :columns="columns"
+                :filter="filter"
                 row-key="gene_id"
                 :visible-columns="visibleColumns"
                 :loading="loading"
-                virtual-scroll
-                :virtual-scroll-item-size="48"
-                :virtual-scroll-sticky-size-start="48"
+                :grid="gridView"
+                selection="multiple"
+                v-model:selected="selected"
                 v-model:pagination="pagination"
-                :rows-per-page-options="[0]"
-                @virtual-scroll="onScroll"
+                @request="onRequest"
             >
                 <template v-slot:top="props">
-                    <div class="col-2 q-table__title">基因数据</div>
+                    <div class="col-2 q-table__title">序列数据</div>
 
                     <q-space />
 
-                    <div v-if="$q.screen.gt.xs" class="col">
-                        <q-toggle
-                            size="xs"
-                            color="secondary"
-                            v-model="visibleColumns"
-                            v-for="i in columns.filter(i => i.name != 'action')"
-                            :val="i.name"
-                            :label="i.label"
-                        />
-                    </div>
                     <q-select
-                        v-else
                         multiple
-                        borderless
+                        filled
+                        :use-chips="$q.screen.gt.md"
                         dense
                         options-dense
                         color="secondary"
-                        style="min-width: 150px"
+                        style="min-width: 150px; max-width: 50vw;"
                         emit-value
                         map-options
                         v-model="visibleColumns"
-                        :display-value="$q.lang.table.columns"
+                        display-value="选择列"
                         :options="columns"
                         option-value="name"
                     />
@@ -156,12 +184,20 @@
                 <template v-slot:body-cell-action="props">
                     <q-td :props="props">
                         <q-btn-group flat stretch>
-                            <q-btn flat round icon="assignment" color="positive" size="ms">
+                            <q-btn
+                                flat
+                                round
+                                icon="assignment"
+                                color="positive"
+                                size="ms"
+                                @click="showDetail(props.row.accession_id)"
+                            >
                                 <q-tooltip>详情</q-tooltip>
                             </q-btn>
                             <q-btn
                                 flat
                                 round
+                                dense
                                 icon="delete"
                                 color="deep-orange-10"
                                 size="ms"
@@ -169,117 +205,252 @@
                                     && (user.value.user_role == 0
                                         || user.value.user_id == props.row.user_id)
                                 "
+                                @click="removeGene(props)"
                             >
                                 <q-tooltip>删除</q-tooltip>
                             </q-btn>
                         </q-btn-group>
                     </q-td>
                 </template>
+
+                <template v-slot:item="props">
+                    <div
+                        class="q-pa-xs col-12 col-lg-6 grid-style-transition"
+                        :style="props.selected ? 'transform: scale(0.95);' : ''"
+                    >
+                        <q-card :class="props.selected ? 'bg-grey-2' : ''">
+                            <q-card-section>
+                                <q-checkbox
+                                    dense
+                                    v-model="props.selected"
+                                    :label="props.row.accession_id"
+                                />
+                            </q-card-section>
+                            <q-separator />
+                            <q-list dense>
+                                <q-item v-for="col in props.cols" :key="col.name">
+                                    <q-item-section>
+                                        <q-item-label>{{ col.label }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side style="max-width: 60%;">
+                                        <q-item-label
+                                            caption
+                                            v-if="col.name != 'action'"
+                                        >{{ col.value }}</q-item-label>
+                                        <q-btn-group v-else flat stretch>
+                                            <q-btn
+                                                flat
+                                                dense
+                                                round
+                                                icon="keyboard_return"
+                                                color="positive"
+                                                @click="hideDetail"
+                                                label="返回列表"
+                                            />
+                                            <q-btn
+                                                flat
+                                                round
+                                                dense
+                                                icon="delete"
+                                                color="deep-orange-10"
+                                                label="删除"
+                                                v-if="user.value
+                                                    && (user.value.user_role == 0
+                                                        || user.value.user_id == props.row.user_id)
+                                                "
+                                                @click="removeGene(props)"
+                                            />
+                                        </q-btn-group>
+                                    </q-item-section>
+                                </q-item>
+                            </q-list>
+                        </q-card>
+                    </div>
+                </template>
             </q-table>
+            <!-- <pre>{{ JSON.stringify(visibleColumns, null, 2) }}</pre> -->
+            <!-- <pre>{{ JSON.stringify(selectItems, null, 2) }}</pre> -->
+            <!-- <pre>{{ JSON.stringify(advace, null, 2) }}</pre> -->
+            <!-- <pre>{{ JSON.stringify(filter, null, 2) }}</pre> -->
         </q-card>
     </q-page>
 </template>
 
 <script setup>
-import { ref, inject, computed, nextTick } from 'vue'
-import testImportJson from '/public/test.json'
+import { ref, inject, onMounted, reactive } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useQuasar } from 'quasar'
+import { geneList, geneDelete, geneSummary } from '@/api/apis.js'
+import gnenTitle from '@/assets/geneTitle.json'
 
 const user = inject('user')
+const $q = useQuasar()
+const router = useRouter()
+const route = useRoute()
 
 // 搜索框
 const tab = ref('query')
-const query = ref(null)
-const onSearch = () => {
-    console.log(query.value)
+const filter = ref(null)
+
+// 高级检索
+let selectItems = ref(null)
+const advace = reactive((function () {
+    let obj = new Object();
+    gnenTitle
+        .filter(i => i.type)
+        .forEach(e => obj[e.name] = null);
+    return obj
+})())
+
+// 重置检索
+const onReset = () => {
+    for (let i in advace) {
+        advace[i] = null
+    }
+}
+
+// 提交检索 
+const onSubmit = () => {
+    let obj = new Object()
+    for (let i in advace) {
+        if (advace[i])
+            obj[i] = advace[i]
+    }
+
+    onRequest({
+        pagination: pagination.value,
+        filter: filter.value,
+        advace: obj
+    })
 }
 
 
 // 数据表
-const columns = [
-    { name: 'gene_id', label: 'ID', field: 'gene_id', align: 'left' },
-    { name: 'virus_strain_same', label: '病毒株名', field: 'virus_strain_same', align: 'left' },
-    { name: 'accession_id', label: '序列号', field: 'accession_id', align: 'left' },
-    { name: 'data_source', label: '数据来源', field: 'data_source', align: 'left' },
-    { name: 'related_id', label: '相关ID', field: 'related_id', align: 'left' },
-    { name: 'lineage', label: '谱系', field: 'lineage', align: 'left' },
-    { name: 'nuc_completeness', label: '序列完整度', field: 'nuc_completeness', align: 'left' },
-    { name: 'sequence_length', label: '序列长度', field: 'sequence_length', align: 'left' },
-    { name: 'sequence_quality', label: '序列质量', field: 'sequence_quality', align: 'left' },
-    { name: 'quality_assessment', label: '质量评估', field: 'quality_assessment', align: 'left' },
-    { name: 'host', label: '宿主', field: 'host', align: 'left' },
-    { name: 'sample_collection_date', label: '采样日期', field: 'sample_collection_date', align: 'left' },
-    { name: 'location', label: '采样地点', field: 'location', align: 'left' },
-    { name: 'originating_lab', label: '样本提供单位', field: 'originating_lab', align: 'left' },
-    { name: 'submission_date', label: '提交时间', field: 'submission_date', align: 'left' },
-    { name: 'submitting_lab', label: '数据递交单位', field: 'submitting_lab', align: 'left' },
-    { name: 'create_time', label: '发布时间', field: 'create_time', align: 'left' },
-    { name: 'last_update_time', label: '更新时间', field: 'last_update_time', align: 'left' },
-    { name: 'action', label: '操作', field: 'gene_id', align: 'center' }
-]
+const columns = gnenTitle
+const rows = ref([])
+const selected = ref([])
+const gridView = ref(false)
+const loading = ref(false)
 const visibleColumns = ref(
     columns
         .map(i => i.name)
         .filter(i => !(
-            i == 'originating_lab'
-            || i == 'submitting_lab'
+            i == 'originating_lab' || i == 'submitting_lab'
         ))
 )
-
-const pagination = ref({ rowsPerPage: 50 })
+const pagination = ref({
+    sortBy: null,
+    descending: false,
+    page: 1,
+    rowsPerPage: 10,
+    rowsNumber: null
+})
 const rating = 5
 
-let allRows = testImportJson
-const pageSize = 10
-const lastPage = Math.ceil(allRows.length / pageSize)
+// 请求数据
+function onRequest(props) {
+    const { page, rowsPerPage, sortBy, descending } = props.pagination
+    const filter = props.filter
+    const advace = props.advace
 
-// const rows = testImportJson
-const nextPage = ref(2)
-const loading = ref(false)
-const rows = computed(() => allRows.slice(0, pageSize * (nextPage.value - 1)))
-
-const onScroll = ({ to, ref }) => {
-    const lastIndex = rows.value.length - 1
-
-    if (loading.value !== true && nextPage.value <= lastPage && to === lastIndex) {
-        loading.value = true
-        console.log(nextPage.value)
-
-        setTimeout(() => {
-            nextPage.value++
-            nextTick(() => {
-                ref.refresh()
-                loading.value = false
+    loading.value = true
+    geneList({
+        filter, advace, page, rowsPerPage, sortBy, descending
+    })
+        .then((res) => {
+            // 
+            console.log(res)
+            rows.value.splice(0, rows.value.length, ...res.data.returnedData)
+            //
+            pagination.value.rowsNumber = res.data.rowsNumber
+            pagination.value.page = page
+            pagination.value.rowsPerPage = rowsPerPage
+            pagination.value.sortBy = sortBy
+            pagination.value.descending = descending
+            // 
+            loading.value = false
+        }).catch((err) => {
+            loading.value = false
+            console.log(err)
+            $q.notify({
+                message: `数据获取失败！${err.msg}`,
+                color: 'negative',
+                position: 'top',
+                icon: 'announcement'
             })
-        }, 500)
-    }
+        })
 }
 
-
-
-// 关联api
 // 基因详情
+const showDetail = (id) => {
+    gridView.value = true
+    filter.value = id
+}
+
+// 返回列表
+const hideDetail = () => {
+    gridView.value = false
+    filter.value = null
+}
+
+// 删除基因
+const removeGene = (p) => {
+    $q.dialog({
+        title: '注意',
+        message: `请确认删除: ${p.row.accession_id}`,
+        cancel: true
+    }).onOk(() => {
+        loading.value = true
+        console.log(p.key)
+        geneDelete(p.key)
+            .then((res) => {
+                loading.value = false
+                console.log(res)
+                onRequest({
+                    pagination: pagination.value,
+                    filter: filter.value
+                })
+                $q.notify({
+                    message: '删除成功',
+                    color: 'primary',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            }).catch((err) => {
+                loading.value = false
+                console.log(err)
+                $q.notify({
+                    message: '删除失败,请重试！',
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            })
+    })
+}
+
+onMounted(() => {
+    console.log(route.query)
+    filter.value = route.query.q
+    onRequest({
+        pagination: pagination.value,
+        filter: route.query.q
+    })
+    geneSummary()
+        .then((res) => {
+            console.log(res)
+            selectItems.value = res.data
+        })
+        .catch((err) => {
+            loading.value = false
+            console.log(err)
+            $q.notify({
+                message: '获取失败,请重试！',
+                color: 'negative',
+                position: 'top',
+                icon: 'announcement'
+            })
+        })
+})
 
 </script>
-
-<style lang="sass">
-
-.my-sticky-dynamic
-    /* height or max-height is important */
-    height: 80vh
-
-    /* bg color is important for th; just specify one */
-    .q-table__top,
-    .q-table__bottom,
-    thead tr:first-child th
-        background-color: #fff
-
-    thead tr th
-        position: sticky
-        z-index: 1
-    /* this will be the loading indicator */
-    thead tr:last-child th
-        /* height of all previous header rows */
-        top: 48px
-    thead tr:first-child th
-        top: 0
-</style>

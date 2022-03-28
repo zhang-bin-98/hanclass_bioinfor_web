@@ -7,7 +7,7 @@ let token = null;
 
 const service = axios.create({
     baseURL: baseURL,
-    timeout: 300000 // 请求超时时间
+    timeout: 30000 // 请求超时时间
 })
 
 const setToken = (value) => {
@@ -32,7 +32,7 @@ service.interceptors.request.use(
             }
             config.data = JSON.stringify(config.data)
         }
-        // console.log(config)
+        console.log(config)
         return config
     },
     // 发送失败
@@ -54,7 +54,7 @@ service.interceptors.response.use(
             // console.log(response.data)
             return Promise.resolve(response.data)
          }
-        return Promise.reject(response)
+        return Promise.reject(response.data)
     },
     (error) => {
         // console.log(error)

@@ -25,5 +25,4 @@ app.use(Quasar, {
     }, // import Quasar plugins and add here
   })
 app.use(router)
-// app.use(naive)
 app.mount('#app')

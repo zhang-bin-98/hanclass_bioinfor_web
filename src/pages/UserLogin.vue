@@ -15,11 +15,9 @@
                         animated
                         swipeable
                         vertical
-                        transition-prev="jump-up"
-                        transition-next="jump-up"
                     >
                         <q-tab-panel name="login">
-                            <q-card-actions vertical class="q-px-lg">
+                            <q-card-actions vertical >
                                 <q-form @submit="onLogin" @reset="onReset" class="q-pt-md">
                                     <q-input
                                         outline
@@ -41,14 +39,14 @@
 
                                     <q-btn-group class="justify-center" spread flat>
                                         <q-btn
-                                            label="Submit"
+                                            label="提交"
                                             type="submit"
                                             flat
                                             color="secondary"
                                             class="text-center"
                                         />
                                         <q-btn
-                                            label="Reset"
+                                            label="重置"
                                             type="reset"
                                             flat
                                             color="secondary"
@@ -103,14 +101,14 @@
 
                                     <q-btn-group class="justify-center" spread flat>
                                         <q-btn
-                                            label="Submit"
+                                            label="提交"
                                             type="submit"
                                             flat
                                             color="secondary"
                                             class="text-center"
                                         />
                                         <q-btn
-                                            label="Reset"
+                                            label="重置"
                                             type="reset"
                                             flat
                                             color="secondary"
@@ -164,7 +162,7 @@ const onLogin = () => {
                 position: 'top',
                 icon: 'announcement'
             })
-            router.push({ name: 'Home' })
+            router.back()
         }).catch((err) => {
             $q.loading.hide()
             console.log(err)

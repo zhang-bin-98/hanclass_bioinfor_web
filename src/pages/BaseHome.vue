@@ -1,15 +1,14 @@
 <template>
     <q-page class="bgp">
         <q-card class="absolute-center q-px-lg" style="opacity:0.7; width: 60em">
-        
             <q-card-section>
-                <div class="text-h3 text-center">2019中国新冠肺炎数据库</div>
+                <div class="text-h3 text-center">2019中国新冠肺炎序列数据库</div>
             </q-card-section>
 
-            <q-separator inset  />
+            <q-separator inset />
 
             <q-card-actions class="q-px-lg">
-                <q-input 
+                <q-input
                     filled
                     clearable
                     clear-icon="clear"
@@ -19,7 +18,16 @@
                     v-model="query"
                 >
                     <template v-slot:after>
-                        <q-btn icon="search" flat round />
+                        <q-btn
+                            icon="search"
+                            flat
+                            round
+                            @click="
+                                router.push({ 
+                                    name: 'GeneList', 
+                                    query: { q: query }})
+                            "
+                        />
                     </template>
                 </q-input>
             </q-card-actions>
@@ -28,7 +36,6 @@
                 <div class="text-h6">简介</div>
                 <div class="text-body1">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
             </q-card-section>
-
         </q-card>
     </q-page>
 </template>
@@ -36,9 +43,10 @@
 <script setup>
 
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const query = ref('')
-
+const router = useRouter()
 </script>
 
 <style lang="sass" scoped>

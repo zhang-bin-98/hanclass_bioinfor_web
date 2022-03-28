@@ -7,8 +7,7 @@ const UserLogin = () => import("@/pages/UserLogin.vue")
 const UserMessage = () => import("@/pages/UserMessage.vue")
 
 const GeneList = () => import("@/pages/GeneList.vue")
-// const GeneDetail = () => import("@/pages/GeneDetail.vue")
-// const GeneUpload = () => import("@/pages/GeneUpload.vue")
+const GeneUpload = () => import("@/pages/GeneUpload.vue")
 
 const routes = [
     {
@@ -37,6 +36,11 @@ const routes = [
         name: "GeneList",
         component: GeneList
     },
+    {
+        path: "/GeneUpload",
+        name: "GeneUpload",
+        component: GeneUpload
+    },
     // 404
     { 
         path: '/:pathMatch(.*)*',
@@ -49,5 +53,11 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: routes
 })
+
+router.afterEach((to, from) => {
+    const toDepth = to.path.split('/').length
+    const fromDepth = from.path.split('/').length
+    to.meta.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+  })
 
 export default router
