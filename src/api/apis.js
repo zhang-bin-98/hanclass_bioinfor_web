@@ -33,7 +33,7 @@ export const userDelete = (user_id) => {
 /****************** 基因数据管理 **********************/
 // 基因列表
 export const geneList = (params = null /* 筛选参数 */) => {
-    console.log(params)
+    // console.log(params)
     return service.get(geneUrl, { params })
 }
 // 基因条目的集合查询

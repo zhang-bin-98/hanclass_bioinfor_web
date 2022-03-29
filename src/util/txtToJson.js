@@ -49,7 +49,7 @@ const transformer = (txt, dem) => {
                     obj[header[idx]] = isNaN(nele) ? ele : nele
                 }
             })
-            obg['idx'] = i
+            // obj['idx'] = i
             return obj
         }
     )

@@ -56,6 +56,18 @@
 
             <q-separator />
 
+            <q-card-section v-if="user.value.user_role">
+                <q-input
+                    filled
+                    dense
+                    type="number"
+                    color="secondary"
+                    label="最大单次上传"
+                    v-model="maxUpload"
+                    :rules="[val => val <= 1000 || '上限1000条/次']"
+                />
+            </q-card-section>
+
             <q-card-section>
                 <div class="text-weight-light">待上传（行/条）：{{ upload?.length ?? "未加载" }}</div>
                 <div class="text-weight-light">已上传（行/条）：{{ uploadedGeneNmber?.length ?? 0 }}</div>
@@ -69,7 +81,7 @@
                     :loading="isUploading"
                     @click="uploadGene"
                 >
-                    <q-tooltip>单次最多100条</q-tooltip>
+                    <q-tooltip>单次最多{{ maxUpload.value }}条</q-tooltip>
                 </q-btn>
             </q-card-section>
             <!-- <pre>{{ JSON.stringify(selected, null, 2) }}</pre> -->
@@ -235,6 +247,7 @@ const initialPagination = ref({
     page: 1,
     rowsPerPage: 20
 })
+const maxUpload = ref(100)
 
 // 单条添加
 const addItem = () => {
@@ -274,6 +287,11 @@ const uploadedGeneNmber = ref(0)
 const uploadFile = (e) => {
     isUploading.value = true
     console.log(fmodel.value)
+    if (!fmodel.value) {
+        isUploading.value = false
+        upload.value = []
+        return
+    }
     txtToJson(fmodel.value)
         .then((res) => {
             isUploading.value = false
@@ -318,10 +336,10 @@ const updataTable = (failUpload) => {
 // 上传数据
 const uploadGene = () => {
     // 限制数量
-    if (selected.value.length > 100) {
-        selected.value = selected.value.slice(0, 100)
+    if (selected.value.length > maxUpload.value) {
+        selected.value = selected.value.slice(0, maxUpload.value)
         $q.notify({
-            message: `单词上传上限为100条。`,
+            message: `单词上传上限为${maxUpload.value}条。`,
             color: 'primary',
             position: 'top',
             icon: 'announcement'

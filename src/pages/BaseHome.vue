@@ -64,13 +64,15 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { geneCount } from '@/api/apis.js'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
 const query = ref('')
 const router = useRouter()
 const numberCount = ref({
     city: 130,
     lineage: 218,
-    nuc_completeness_percent: '92%',
+    nuc_completeness_percent: 0.92,
     items: 9588
 })
 

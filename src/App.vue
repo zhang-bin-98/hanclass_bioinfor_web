@@ -63,8 +63,12 @@
       <q-toolbar>
         <q-toolbar-title>51522zzwlwlbb</q-toolbar-title>
         <q-btn-group flat>
-          <q-btn label="前端仓库" />
-          <q-btn label="后端仓库" />
+          <a href="https://github.com/zhang-bin-98/hanclass_bioinfor_web">
+            <q-btn flat label="前端仓库" class="text-grey-1" />
+          </a>
+          <a href="https://github.com/zhang-bin-98/hanclass_bioinfor_server">
+            <q-btn flat label="后端仓库" class="text-grey-1" />
+          </a>
         </q-btn-group>
       </q-toolbar>
     </q-footer>
