@@ -13,14 +13,8 @@
                     <div class="text-subtitle1">手动上传</div>
                 </q-item-section>
                 <q-item-section side>
-                    <q-btn
-                        outline
-                        color="secondary"
-                        icon="add_box"
-                        label="添加一条"
-                        :loading="isUploading"
-                        @click="addItem"
-                    />
+                    <q-btn outline color="secondary" icon="add_box" label="添加一条" :loading="isUploading"
+                        @click="addItem" />
                 </q-item-section>
             </q-card-actions>
 
@@ -29,86 +23,49 @@
             <!-- 文件上传 -->
             <q-card-section>
                 <div class="text-subtitle1 q-pb-sm">文件上传(选择文件后请刷新)</div>
-                <q-file
-                    filled
-                    bottom-slots
-                    counter
-                    clearable
-                    label="点击选择文件"
-                    color="secondary"
-                    accept=".csv, .tsv"
-                    v-model="fmodel"
-                >
+                <q-file filled bottom-slots counter clearable label="点击选择文件" color="secondary" accept=".csv, .tsv"
+                    v-model="fmodel">
                     <template v-slot:hint>文件大小</template>
 
                     <template v-slot:after>
-                        <q-btn
-                            color="secondary"
-                            dense
-                            icon="refresh"
-                            round
-                            @click="uploadFile"
-                            :loading="isUploading"
-                        />
+                        <q-btn color="secondary" dense icon="refresh" round @click="uploadFile"
+                            :loading="isUploading" />
                     </template>
                 </q-file>
             </q-card-section>
 
             <q-separator />
 
-            <q-card-section v-if="user.value.user_role">
-                <q-input
-                    filled
-                    dense
-                    type="number"
-                    color="secondary"
-                    label="最大单次上传"
-                    v-model="maxUpload"
-                    :rules="[val => val <= 1000 || '上限1000条/次']"
-                />
+            <q-card-section v-if="user.user_role" class="q-pb-none">
+                <q-input filled dense type="number" color="secondary" label="最大单次上传" v-model="maxUpload"
+                    :rules="[val => val <= 1000 || '上限1000条/次']" />
             </q-card-section>
 
             <q-card-section>
                 <div class="text-weight-light">待上传（行/条）：{{ upload?.length ?? "未加载" }}</div>
-                <div class="text-weight-light">已上传（行/条）：{{ uploadedGeneNmber?.length ?? 0 }}</div>
-                <q-btn
-                    outline
-                    class="full-width q-mt-md"
-                    color="secondary"
-                    icon="cloud_upload"
-                    label="上传已选数据"
-                    :disable="selected.length == 0"
-                    :loading="isUploading"
-                    @click="uploadGene"
-                >
-                    <q-tooltip>单次最多{{ maxUpload.value }}条</q-tooltip>
+                <div class="text-weight-light">已上传（行/条）：{{ uploadedGeneNmber }}</div>
+                <q-btn outline class="full-width q-mt-md" color="secondary" icon="cloud_upload" label="上传已选数据"
+                    :disable="selected.length == 0" :loading="isUploading" @click="uploadGene">
+                    <q-tooltip>单次最多{{ maxUpload }}条</q-tooltip>
                 </q-btn>
             </q-card-section>
+
+
             <!-- <pre>{{ JSON.stringify(selected, null, 2) }}</pre> -->
             <!-- <pre class="overflow-hidden">{{ JSON.stringify(upload, null, 2) }}</pre> -->
         </q-card>
         <q-card flat class="col-8 q-pa-md">
             <!-- 待上传表格 -->
-            <q-table
-                dense
-                title="数据信息(点击数据可编辑)"
-                row-key="accession_id"
-                selection="multiple"
-                :rows="upload"
-                :loading="loading"
-                :grid="gridView"
-                :columns="columns"
-                :filter="filter"
-                :pagination="initialPagination"
-                v-model:selected="selected"
-            >
+            <q-table dense title="数据信息(点击数据可编辑)" row-key="accession_id" selection="multiple" :rows="upload"
+                :loading="loading" :grid="gridView" :columns="columns" :filter="filter" :pagination="initialPagination"
+                v-model:selected="selected">
                 <template v-slot:top-right>
                     <q-input borderless dense debounce="300" v-model="filter" placeholder="搜索">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
-                    <q-toggle v-show="user.value.user_role" v-model="gridView">
+                    <q-toggle v-show="user.user_role" v-model="gridView">
                         <q-tooltip>卡片/表格模式</q-tooltip>
                     </q-toggle>
                 </template>
@@ -125,14 +82,7 @@
                             </q-popup-edit>
                         </q-td>
                         <q-td :props="props" key="action">
-                            <q-btn
-                                flat
-                                dense
-                                size="sm"
-                                icon="delete"
-                                color="negative"
-                                @click="removeData(props.key)"
-                            >
+                            <q-btn flat dense size="sm" icon="delete" color="negative" @click="removeData(props.key)">
                                 <q-tooltip>删除</q-tooltip>
                             </q-btn>
                         </q-td>
@@ -148,17 +98,12 @@
                 </template>
 
                 <template v-slot:item="props">
-                    <div
-                        class="q-pa-xs col-12 col-lg-6 grid-style-transition"
-                        :style="props.selected ? 'transform: scale(0.95);' : ''"
-                    >
+                    <div class="q-pa-xs col-12 col-lg-6 grid-style-transition"
+                        :style="props.selected ? 'transform: scale(0.95);' : ''">
                         <q-card :class="props.selected ? 'bg-grey-2' : ''">
                             <q-card-section>
-                                <q-checkbox
-                                    dense
-                                    v-model="props.selected"
-                                    :label="props.row.action ? '添加序列数据' : props.row.accession_id"
-                                />
+                                <q-checkbox dense v-model="props.selected"
+                                    :label="props.row.action ? '添加序列数据' : props.row.accession_id" />
                             </q-card-section>
                             <q-separator />
                             <q-list dense>
@@ -169,47 +114,23 @@
                                     <q-item-section side style="max-width: 60%;">
                                         <q-item-label caption v-if="col.name != 'action'">
                                             {{ col.value }}
-                                            <q-popup-edit
-                                                v-model="props.row[col.name]"
-                                                v-slot="scope"
-                                                buttons
-                                            >
-                                                <q-input
-                                                    v-model="scope.value"
-                                                    dense
-                                                    autofocus
-                                                    counter
-                                                />
+                                            <q-popup-edit v-model="props.row[col.name]" v-slot="scope" buttons>
+                                                <q-input v-model="scope.value" dense autofocus counter />
                                             </q-popup-edit>
                                         </q-item-label>
                                         <q-btn-group v-else flat stretch>
                                             <!-- 手动输入 -->
-                                            <q-btn
-                                                v-show="props.row.action"
-                                                flat
-                                                icon="keyboard_return"
-                                                color="positive"
-                                                @click="addGoback(props.key)"
-                                            >
+                                            <q-btn v-show="props.row.action" flat icon="keyboard_return"
+                                                color="positive" @click="addGoback(props.key)">
                                                 <q-tooltip>返回</q-tooltip>
                                             </q-btn>
-                                            <q-btn
-                                                v-show="props.row.action"
-                                                flat
-                                                icon="save"
-                                                color="positive"
-                                                @click="addSave(props)"
-                                            >
+                                            <q-btn v-show="props.row.action" flat icon="save" color="positive"
+                                                @click="addSave(props)">
                                                 <q-tooltip>保存</q-tooltip>
                                             </q-btn>
                                             <!-- 文件加载 -->
-                                            <q-btn
-                                                v-show="!props.row.action"
-                                                flat
-                                                icon="delete"
-                                                color="negative"
-                                                @click="removeData(props.key)"
-                                            >
+                                            <q-btn v-show="!props.row.action" flat icon="delete" color="negative"
+                                                @click="removeData(props.key)">
                                                 <q-tooltip>删除</q-tooltip>
                                             </q-btn>
                                         </q-btn-group>
@@ -219,20 +140,48 @@
                         </q-card>
                     </div>
                 </template>
+
+                <template v-slot:no-data="{ icon, message, filter }">
+                    <q-card class="full-width" flat>
+                        <q-card-section class="row flex-center text-accent q-gutter-sm">
+                            <span>
+                                {{ message }}
+                            </span>
+                            <q-icon size="2em" :name="filter ? 'filter_b_and_w' : icon" />
+                        </q-card-section>
+
+                        <q-separator />
+
+                        <q-list dense>
+                            <h6 class="text-center q-my-none">上传文件(*.tsv/csv)列名对应表</h6>
+                            <q-item v-for="col in gnenTitle" :key="col.name">
+                                <q-item-section>
+                                    <q-item-label>{{ col.label }}</q-item-label>
+                                </q-item-section>
+                                <q-item-section side>
+                                    <q-item-label>{{ col.field + (col.pattern ? " (" + col.pattern + ")" : "") }}</q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-card>
+                </template>
             </q-table>
         </q-card>
     </q-page>
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { txtToJson } from '@/util/txtToJson.js'
 import { geneCreate } from '@/api/apis.js'
+import { storeToRefs } from "pinia";
+import { mainStore } from "@/store/index"
 import gnenTitle from '@/assets/geneTitle.json'
 
 const $q = useQuasar()
-const user = inject('user')
+const store = mainStore()
+const { user } = storeToRefs(store)
 
 // 待上传表格
 const filter = ref(null)
@@ -252,7 +201,7 @@ const maxUpload = ref(100)
 // 单条添加
 const addItem = () => {
     gridView.value = true
-    let obj = new Object()
+    let obj = {}
     columns
         .forEach(i => {
             obj[i.name] = (i.pattern ?? "text") + "(点击编辑)"
@@ -329,8 +278,6 @@ const updataTable = (failUpload) => {
         // console.log(failUpload)
         upload.value.push(...failUpload)
     }
-    uploadedGeneNmber.value += uploadSet.length - failUpload.length
-
 }
 
 // 上传数据
@@ -339,7 +286,7 @@ const uploadGene = () => {
     if (selected.value.length > maxUpload.value) {
         selected.value = selected.value.slice(0, maxUpload.value)
         $q.notify({
-            message: `单词上传上限为${maxUpload.value}条。`,
+            message: `单次上传上限为${maxUpload.value}条。`,
             color: 'primary',
             position: 'top',
             icon: 'announcement'
@@ -351,6 +298,7 @@ const uploadGene = () => {
     geneCreate({ data: selected.value })
         .then((res) => {
             isUploading.value = false
+            uploadedGeneNmber.value += res.count
             updataTable(res.data)
             // console.log(upload.value)
             console.log(res)
@@ -362,7 +310,6 @@ const uploadGene = () => {
             })
         }).catch((err) => {
             isUploading.value = false
-            updataTable(err.data)
             console.log(err)
             $q.notify({
                 message: `上传失败！${err?.msg}`,

@@ -46,7 +46,7 @@
                     <span class="text-weight-bold tex-pink-10">{{ numberCount.city }}</span>多个不同城市(地区)、
                     <span class="text-weight-bold tex-pink-10">{{ numberCount.lineage }}</span>
                     个不同谱系病毒的共计<span class="text-weight-bold tex-pink-10">{{ numberCount.items }}</span>条数据，
-                    其中完整序列的比列可达<span class="text-weight-bold tex-pink-10">{{ numberCount.nuc_completeness_percent * 100.0 }}%</span>。
+                    其中完整序列的比列可达<span class="text-weight-bold tex-pink-10">{{ Number(numberCount.nuc_completeness_percent * 100).toFixed(2) }}%</span>。
                     除提供病毒株名，序列号，ID，采样、递交和上传时间等常规信息外，
                     本网站还提供了对序列完整度为“Complete”的基因组序列进行检测得到的质量评估结果。
                     该结果从包未知碱基（N）、简并碱基（非ATGCN的碱基）数量、

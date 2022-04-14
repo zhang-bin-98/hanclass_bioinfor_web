@@ -2,13 +2,13 @@
     <q-page class="q-pa-md bg-grey-1 row items-center justify-center">
         <q-card
             class="q-pa-md"
-            :class="!user.value.user_role && $q.screen.gt.md ? 'col-4' : 'col-11'"
+            :class="!user.user_role && $q.screen.gt.md ? 'col-4' : 'col-11'"
         >
             <q-table
                 title="用户信息"
                 row-key="user_id"
                 selection="multiple"
-                :grid="user.value.user_role ? gridView : true"
+                :grid="user.user_role ? gridView : true"
                 :rows="rows"
                 :loading="loading"
                 :filter="filter"
@@ -22,7 +22,7 @@
                         dense
                         debounce="300"
                         v-model="filter"
-                        v-show="user.value.user_role"
+                        v-show="user.user_role"
                         placeholder="检索"
                     >
                         <template v-slot:append>
@@ -32,7 +32,7 @@
                     <q-btn flat icon="refresh" @click="getUser">
                         <q-tooltip>刷新</q-tooltip>
                     </q-btn>
-                    <q-toggle v-show="user.value.user_role" v-model="gridView">
+                    <q-toggle v-show="user.user_role" v-model="gridView">
                         <q-tooltip>卡片/表格模式</q-tooltip>
                     </q-toggle>
                 </template>
@@ -44,7 +44,7 @@
                             flat
                             icon="delete"
                             color="negative"
-                            @click="removeUser(props.value)"
+                            @click="removeUser(props.row)"
                         >
                             <q-tooltip>删除</q-tooltip>
                         </q-btn>
@@ -54,7 +54,7 @@
                 <template v-slot:item="props">
                     <div
                         class="q-pa-xs col-xs-12 grid-style-transition"
-                        :class="user.value.user_role ? 'col-md-4 col-lg-2' : ''"
+                        :class="user.user_role ? 'col-md-4 col-lg-2' : ''"
                         :style="props.selected ? 'transform: scale(0.95);' : ''"
                     >
                         <q-card :class="props.selected ? 'bg-grey-2' : ''">
@@ -85,7 +85,7 @@
                                             flat
                                             icon="delete"
                                             color="negative"
-                                            @click="removeUser(props.value)"
+                                            @click="removeUser(props.row)"
                                         >
                                             <q-tooltip>注销</q-tooltip>
                                         </q-btn>
@@ -110,10 +110,15 @@ import { ref, inject, onMounted, onBeforeMount } from 'vue'
 import { userDelete, resetToken, userList } from '@/api/apis.js'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from "pinia";
+import { mainStore } from "@/store/index"
+import { columns } from "@/assets/userTitle.js"
 
 const $q = useQuasar()
 const router = useRouter()
-const user = inject('user')
+const store = mainStore()
+const {user} = storeToRefs(store)
+
 
 const filter = ref(null)
 const loading = ref(false)
@@ -126,23 +131,15 @@ const initialPagination = ref({
     rowsPerPage: 10
 })
 
-const columns = [
-    { name: 'user_id', label: 'ID', field: 'user_id', align: 'left', sortable: true },
-    { name: 'username', label: '用户名', field: 'username', align: 'left', sortable: true },
-    { name: 'email', label: '电子邮箱', field: 'email', align: 'left', sortable: true },
-    { name: 'create_at', label: '注册时间', field: 'create_at', align: 'left', sortable: true }, // 需要格式化
-    { name: 'user_role', label: '用户权限', field: 'user_role', align: 'left', sortable: true, format: val => val === 1 ? '管理员' : '普通用户' },
-    { name: 'action', label: '操作', field: 'user_id', align: 'center' }
-]
 const rows = ref([])
 
 const getUser = () => {
-    console.log(user.value)
+    // console.log(user)
     loading.value = true
     userList(
-        user.value.user_role == 1
+        user.user_role == 1
             ? null
-            : user.value.user_id)
+            : user.user_id)
         .then((res) => {
             loading.value = false
             console.log(res)
@@ -158,15 +155,15 @@ const getUser = () => {
         })
 }
 
-const removeUser = (id) => {
+const removeUser = (row) => {
     $q.dialog({
         title: '注意',
-        message: `请确删除用户: ${id}`,
+        message: `请确认删除用户: ${row.username}`,
         cancel: true
     }).onOk(() => {
         $q.loading.show()
-        console.log(id)
-        userDelete(id)
+        console.log(row)
+        userDelete({ id: row.user_id })
             .then((res) => {
                 $q.loading.hide()
                 console.log(res)
@@ -176,9 +173,9 @@ const removeUser = (id) => {
                     position: 'top',
                     icon: 'announcement'
                 })
-                if (id == user.value.user_id) {
+                if (row.user_id == user.user_id) {
                     resetToken(null)
-                    user.value = null
+                    user = null
                     router.replace({ name: 'Home' })
                 } else {
                     getUser()
@@ -203,16 +200,13 @@ const alert = () => {
         cancel: true
     }).onOk(() => {
         resetToken(null)
-        user.value = null
+        user = null
         router.replace({ name: 'Home' })
     })
 }
 
 // 页面切换前请求数据
 onMounted(() => {
-    if (!user.value) {
-        router.replace({ name: 'Home' })
-    }
     getUser()
 })
 

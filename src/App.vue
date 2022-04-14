@@ -4,9 +4,9 @@
       elevated
       class="text-white"
       :class="
-        !user.value
+        !user
           ? 'bg-light-green-9'
-          : user.value.user_role
+          : user.user_role
             ? 'bg-blue-grey-9'
             : 'bg-primary'
       "
@@ -33,19 +33,25 @@
             active-class="text-cyan-12"
             label="上传数据"
             icon="cloud_upload"
-            :to="user.value ? { name: 'GeneUpload' } : { name: 'UserLogin' }"
+            :to="{ name: 'GeneUpload' }"
+          />
+          <q-breadcrumbs-el
+            active-class="text-cyan-12"
+            label="关于网站"
+            icon="description"
+            :to="{ name: 'About' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"
             :label="
-              !user.value
+              !user
                 ? '登录'
-                : user.value.user_role
+                : user.user_role
                   ? '用户列表'
                   : '用户中心'
             "
             icon="person"
-            :to="user.value ? { name: 'UserMessage' } : { name: 'UserLogin' }"
+            :to="{ name: 'UserMessage' }"
           />
         </q-breadcrumbs>
       </q-toolbar>
@@ -53,7 +59,7 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <transition :name="route.meta.transition">
+        <transition :name="route.meta.transitionName">
           <component :is="Component" />
         </transition>
       </router-view>
@@ -76,12 +82,12 @@
 </template>
 
 <script setup>
-import { reactive, provide } from 'vue'
 import { useRoute } from 'vue-router'
-
+import { storeToRefs } from "pinia";
+import { mainStore } from "@/store/index"
+const store = mainStore()
 const route = useRoute()
 
-const user = reactive({})
-provide('user', user)
+let {user} = storeToRefs(store)
 
 </script>

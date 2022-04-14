@@ -123,23 +123,27 @@
                 </template>
             </q-splitter>
             <!-- <pre>{{ JSON.stringify({ username, email, password, repassword }, null, 2) }}</pre>
-            <pre>{{ JSON.stringify(user.value, null, 2) }}</pre> -->
+            <pre>{{ JSON.stringify(user, null, 2) }}</pre> -->
         </q-card>
     </q-page>
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRouter,useRoute } from 'vue-router'
 import { userLogin, userCreate } from '@/api/apis.js'
 import { useQuasar } from 'quasar'
+import { storeToRefs } from "pinia";
+import { mainStore } from "@/store/index"
 
-const splitterModel = ref('20')
+const splitterModel = ref(20)
 const tab = ref('login')
 
+const store = mainStore()
+let {user} = storeToRefs(store)
 const $q = useQuasar()
-const user = inject('user')
 const router = useRouter()
+const route = useRoute()
 
 const username = ref(null)
 const password = ref(null)
@@ -155,14 +159,14 @@ const onLogin = () => {
         .then((res) => {
             $q.loading.hide()
             console.log(res)
-            user.value = res.data
+            store.user = res.data
             $q.notify({
                 message: '登陆成功',
                 color: 'primary',
                 position: 'top',
                 icon: 'announcement'
             })
-            router.back()
+            router.replace({ path: route.query.redirect })
         }).catch((err) => {
             $q.loading.hide()
             console.log(err)
@@ -185,13 +189,13 @@ const onSignup = () => {
         .then((res) => {
             $q.loading.hide()
             console.log(res)
-            user.value = res.data
+            store.user = res.data
             $q.notify({
                 message: '注册成功!',
                 color: 'positive',
                 position: 'top'
             })
-            router.push({ name: 'Home' })
+            router.replace({ path: route.query.redirect })
         }).catch((err) => {
             $q.loading.hide()
             console.log(err)
