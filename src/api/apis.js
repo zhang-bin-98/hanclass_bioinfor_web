@@ -33,12 +33,16 @@ export const userDelete = (user_id) => {
 /****************** 基因数据管理 **********************/
 // 基因列表
 export const geneList = (params = null /* 筛选参数 */) => {
-    console.log(params)
+    // console.log(params)
     return service.get(geneUrl, { params })
 }
 // 基因条目的集合查询
 export const geneSummary = () => {
     return service.get(`${geneUrl}/summary`)
+}
+// 基因条目的数量
+export const geneCount = () => {
+    return service.get(`${geneUrl}/count`)
 }
 // 添加基因信息
 export const geneCreate = (data) => {

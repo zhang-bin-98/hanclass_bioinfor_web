@@ -11,7 +11,7 @@ const transformer = (txt, dem) => {
                 .replace(/\s|\./g, '_')
         )
 
-    console.log(header)
+    // console.log(header)
     // console.log(lines)
 
     if (!header?.length || !lines[0]?.length) {
@@ -42,14 +42,13 @@ const transformer = (txt, dem) => {
             let obj = {}
             l.forEach((ele, idx) => {
                 if (!columnSet.has(header[idx])) return
-                if (ele === "NA") {
+                if (ele === "NA" || ele === "null" || ele === "") {
                     obj[header[idx]] = null
                 } else {
                     const nele = Number(ele)
                     obj[header[idx]] = isNaN(nele) ? ele : nele
                 }
             })
-            obg['idx'] = i
             return obj
         }
     )

@@ -201,9 +201,9 @@
                                 icon="delete"
                                 color="deep-orange-10"
                                 size="ms"
-                                v-if="user.value
-                                    && (user.value.user_role == 0
-                                        || user.value.user_id == props.row.user_id)
+                                v-if="user
+                                    && (user.user_role == 0
+                                        || user.user_id == props.row.user_id)
                                 "
                                 @click="removeGene(props)"
                             >
@@ -254,9 +254,9 @@
                                                 icon="delete"
                                                 color="deep-orange-10"
                                                 label="删除"
-                                                v-if="user.value
-                                                    && (user.value.user_role == 0
-                                                        || user.value.user_id == props.row.user_id)
+                                                v-if="user
+                                                    && (user.user_role == 0
+                                                        || user.user_id == props.row.user_id)
                                                 "
                                                 @click="removeGene(props)"
                                             />
@@ -277,15 +277,19 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { geneList, geneDelete, geneSummary } from '@/api/apis.js'
+import { storeToRefs } from "pinia";
+import { mainStore } from "@/store/index"
 import gnenTitle from '@/assets/geneTitle.json'
 
-const user = inject('user')
+
+const store = mainStore()
+const {user} = storeToRefs(store)
+
 const $q = useQuasar()
-const router = useRouter()
 const route = useRoute()
 
 // 搜索框
@@ -442,7 +446,6 @@ onMounted(() => {
             selectItems.value = res.data
         })
         .catch((err) => {
-            loading.value = false
             console.log(err)
             $q.notify({
                 message: '获取失败,请重试！',
