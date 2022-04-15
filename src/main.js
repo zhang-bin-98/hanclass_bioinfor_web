@@ -18,7 +18,6 @@ import 'quasar/src/css/index.sass'
 
 
 const app = Vue.createApp(App)
-// app.use(VueAxios, axios)
 app.use(Quasar, {
     plugins: { 
       Notify,

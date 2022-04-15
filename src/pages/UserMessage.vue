@@ -175,7 +175,7 @@ const removeUser = (row) => {
                 })
                 if (row.user_id == user.user_id) {
                     resetToken(null)
-                    user = null
+                    store.user = null
                     router.replace({ name: 'Home' })
                 } else {
                     getUser()
@@ -200,7 +200,7 @@ const alert = () => {
         cancel: true
     }).onOk(() => {
         resetToken(null)
-        user = null
+        store.user = null
         router.replace({ name: 'Home' })
     })
 }

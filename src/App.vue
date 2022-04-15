@@ -58,11 +58,7 @@
     </q-header>
 
     <q-page-container>
-      <router-view v-slot="{ Component }">
-        <transition :name="route.meta.transitionName">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <router-view />
     </q-page-container>
 
     <q-footer elevated class="bg-grey-8 text-white">
@@ -85,9 +81,10 @@
 import { useRoute } from 'vue-router'
 import { storeToRefs } from "pinia";
 import { mainStore } from "@/store/index"
+
 const store = mainStore()
 const route = useRoute()
 
-let {user} = storeToRefs(store)
+const {user} = storeToRefs(store)
 
 </script>

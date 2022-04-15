@@ -3,8 +3,8 @@ import axios from 'axios'
 
 // https://zhuanlan.zhihu.com/p/274238013
 // '10.1.70.10/students/202128010315003/tp5/public'
-let baseURL = '/api' // 开发环境
-// let baseURL ='tp5/public' // 生产环境
+// let baseURL = '/api' // 开发环境
+let baseURL ='tp5/public' // 生产环境
 let token = null;
 
 
