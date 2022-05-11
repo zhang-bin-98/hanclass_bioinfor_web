@@ -27,19 +27,24 @@
             active-class="text-cyan-12"
             label="序列数据"
             icon="widgets"
-            :to="{ name: 'GeneList' }"
+            :to="{ name: 'SeqList' }"
+          />
+          <q-breadcrumbs-el
+            active-class="text-cyan-12"
+            label="基因表达"
+            icon="widgets"
+            :to="{ name: 'GeneExp' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"
             label="上传数据"
             icon="cloud_upload"
-            :to="{ name: 'GeneUpload' }"
+            :to="{ name: 'SeqUpload' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"
             label="关于网站"
             icon="description"
-            :to="{ name: 'About' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"

@@ -5,8 +5,5 @@ export const mainStore = defineStore('main',{
       return {
           user: null
       }
-    },
-    getters: {
-        getUser: (state) => state.user,
-    },
+    }
   })
