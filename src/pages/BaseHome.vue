@@ -61,9 +61,9 @@
 
 <script setup>
 
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { geneCount } from '@/api/apis.js'
+import { seqCount } from '@/api/apis.js'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
@@ -77,7 +77,7 @@ const numberCount = ref({
 })
 
 onMounted(() => {
-    geneCount()
+    seqCount()
         .then((res) => {
             console.log(res)
             numberCount.value = res.data

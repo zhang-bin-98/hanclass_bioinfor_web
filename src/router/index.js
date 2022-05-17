@@ -13,7 +13,7 @@ const SeqUpload = () => import("@/pages/SeqUpload.vue")
 
 const SeqBlast = () => import('@/pages/SeqBlast.vue')
 
-const GeneExp = () => impost('@/pages/GeneExp.vue')
+const GeneExp = () => import('@/pages/GeneExp/index.vue')
 
 const routes = [
     {
@@ -52,8 +52,7 @@ const routes = [
     {
         path: "/SeqBlast",
         name: "SeqBlast",
-        component: SeqBlast,
-        meta: { requiresAuth: true }
+        component: SeqBlast
     },
     // gene
     {

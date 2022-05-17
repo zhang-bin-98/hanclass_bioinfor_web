@@ -236,7 +236,19 @@
                                         <q-item-label
                                             caption
                                             v-if="col.name != 'action'"
-                                        >{{ col.value }}</q-item-label>
+                                        >{{ col.value }}
+                                            <q-popup-edit 
+                                                v-model="props.row[col.name]" 
+                                                v-slot="scope"
+                                                v-if="user
+                                                    && (user.user_role == 0
+                                                        || user.user_id == props.row.user_id)
+                                                "
+                                                buttons
+                                            >
+                                                <q-input v-model="scope.value" dense autofocus counter />
+                                            </q-popup-edit>
+                                        </q-item-label>
                                         <q-btn-group v-else flat stretch>
                                             <q-btn
                                                 flat
@@ -246,6 +258,19 @@
                                                 color="positive"
                                                 @click="hideDetail"
                                                 label="返回列表"
+                                            />
+                                            <q-btn
+                                                flat
+                                                round
+                                                dense
+                                                icon="build"
+                                                color="deep-orange"
+                                                label="修改"
+                                                v-if="user
+                                                    && (user.user_role == 0
+                                                        || user.user_id == props.row.user_id)
+                                                "
+                                                @click="changeSeq(props)"
                                             />
                                             <q-btn
                                                 flat
@@ -280,7 +305,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { seqList, seqDelete, seqSummary } from '@/api/apis.js'
+import { seqList, seqDelete, seqUpdate, seqSummary } from '@/api/apis.js'
 import { storeToRefs } from "pinia"
 import { mainStore } from "@/store/index"
 import seqTitle from '@/assets/seqTitle.json'
@@ -385,7 +410,7 @@ function onRequest(props) {
         })
 }
 
-// 基因详情
+// 序列详情
 const showDetail = (id) => {
     gridView.value = true
     filter.value = id
@@ -397,7 +422,7 @@ const hideDetail = () => {
     filter.value = null
 }
 
-// 删除基因
+// 删除序列
 const removeSeq = (p) => {
     $q.dialog({
         title: '注意',
@@ -425,6 +450,47 @@ const removeSeq = (p) => {
                 console.log(err)
                 $q.notify({
                     message: '删除失败,请重试！',
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            })
+    })
+}
+
+// 修改序列
+const changeSeq = (p) => {
+    console.log(p)
+    $q.dialog({
+        title: '注意',
+        message: `请确认修改: ${p.row.accession_id}`,
+        cancel: true
+    }).onOk(() => {
+        loading.value = true
+        console.log(p.key)
+        seqUpdate({data: p.row}, p.key)
+            .then((res) => {
+                loading.value = false
+                console.log(res)
+                onRequest({
+                    pagination: pagination.value,
+                    filter: filter.value
+                })
+                $q.notify({
+                    message: '修改成功',
+                    color: 'primary',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            }).catch((err) => {
+                loading.value = false
+                console.log(err)
+                onRequest({
+                    pagination: pagination.value,
+                    filter: filter.value
+                })
+                $q.notify({
+                    message: '修改失败,请重试！',
                     color: 'negative',
                     position: 'top',
                     icon: 'announcement'

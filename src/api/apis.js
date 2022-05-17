@@ -52,8 +52,10 @@ export const seqCreate = (data) => {
     return service.post(seqUrl, data)
 }
 // 更新(修改)序列信息
-export const seqUpdate = (data) => {
-    return service.put(seqUrl, data)
+export const seqUpdate = (data, seq_id) => {
+    console.log(data)
+    console.log(seq_id)
+    return service.put(`${seqUrl}/${seq_id}`, data)
 } 
 // 删除序列信息
 export const seqDelete = (seq_id) => {
@@ -68,6 +70,10 @@ export const seqBlast = (data) => {
     return service.post(`${seqBlastUrl}`, data)
 }
 // gene express
+export const geneList = () => {
+    return service.get(`${geneUrl}`)
+}
+// gene express
 export const geneExp = (data) => {
-    return service.get(`${geneUrl}`, data)
+    return service.post(`${geneUrl}`, data)
 }
