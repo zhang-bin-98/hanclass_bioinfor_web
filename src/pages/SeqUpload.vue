@@ -43,9 +43,9 @@
 
             <q-card-section>
                 <div class="text-weight-light">待上传（行/条）：{{ upload?.length ?? "未加载" }}</div>
-                <div class="text-weight-light">已上传（行/条）：{{ uploadedGeneNmber }}</div>
+                <div class="text-weight-light">已上传（行/条）：{{ uploadedSeqNmber }}</div>
                 <q-btn outline class="full-width q-mt-md" color="secondary" icon="cloud_upload" label="上传已选数据"
-                    :disable="selected.length == 0" :loading="isUploading" @click="uploadGene">
+                    :disable="selected.length == 0" :loading="isUploading" @click="uploadSeq">
                     <q-tooltip>单次最多{{ maxUpload }}条</q-tooltip>
                 </q-btn>
             </q-card-section>
@@ -174,10 +174,10 @@
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { txtToJson } from '@/util/txtToJson.js'
-import { geneCreate } from '@/api/apis.js'
+import { seqCreate } from '@/api/apis.js'
 import { storeToRefs } from "pinia";
 import { mainStore } from "@/store/index"
-import gnenTitle from '@/assets/geneTitle.json'
+import gnenTitle from '@/assets/seqTitle.json'
 
 const $q = useQuasar()
 const store = mainStore()
@@ -230,7 +230,7 @@ const addSave = (p) => {
 // 文件相关
 const fmodel = ref(null)
 const isUploading = ref(false)
-const uploadedGeneNmber = ref(0)
+const uploadedSeqNmber = ref(0)
 
 // 加载文件
 const uploadFile = (e) => {
@@ -248,7 +248,7 @@ const uploadFile = (e) => {
             // 加载表格
             loading.value = true
             upload.value = res.data
-            uploadedGeneNmber.value = 0
+            uploadedSeqNmber.value = 0
             loading.value = false
         }).catch((err) => {
             isUploading.value = false
@@ -281,7 +281,7 @@ const updataTable = (failUpload) => {
 }
 
 // 上传数据
-const uploadGene = () => {
+const uploadSeq = () => {
     // 限制数量
     if (selected.value.length > maxUpload.value) {
         selected.value = selected.value.slice(0, maxUpload.value)
@@ -295,10 +295,10 @@ const uploadGene = () => {
     // 上传
     console.log(selected.value)
     isUploading.value = true
-    geneCreate({ data: selected.value })
+    seqCreate({ data: selected.value })
         .then((res) => {
             isUploading.value = false
-            uploadedGeneNmber.value += res.count
+            uploadedSeqNmber.value += res.count
             updataTable(res.data)
             // console.log(upload.value)
             console.log(res)

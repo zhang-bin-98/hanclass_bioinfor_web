@@ -12,7 +12,7 @@
       "
     >
       <q-toolbar>
-        <q-toolbar-title>2019中国新冠肺炎序列数据库</q-toolbar-title>
+        <q-toolbar-title>2019中国新冠肺炎信息数据库</q-toolbar-title>
 
         <q-space />
 
@@ -27,19 +27,25 @@
             active-class="text-cyan-12"
             label="序列数据"
             icon="widgets"
-            :to="{ name: 'GeneList' }"
+            :to="{ name: 'SeqList' }"
+          />
+          <q-breadcrumbs-el
+            active-class="text-cyan-12"
+            label="序列比对"
+            icon="manage_search"
+            :to="{ name: 'SeqBlast' }"
+          />
+          <q-breadcrumbs-el
+            active-class="text-cyan-12"
+            label="基因表达"
+            icon="fitbit"
+            :to="{ name: 'GeneExp' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"
             label="上传数据"
             icon="cloud_upload"
-            :to="{ name: 'GeneUpload' }"
-          />
-          <q-breadcrumbs-el
-            active-class="text-cyan-12"
-            label="关于网站"
-            icon="description"
-            :to="{ name: 'About' }"
+            :to="{ name: 'SeqUpload' }"
           />
           <q-breadcrumbs-el
             active-class="text-cyan-12"
@@ -65,6 +71,9 @@
       <q-toolbar>
         <q-toolbar-title>51522zzwlwlbb</q-toolbar-title>
         <q-btn-group flat>
+          <a href="./docs">
+            <q-btn flat label="关于网站" class="text-grey-1" />
+          </a>
           <a href="https://github.com/zhang-bin-98/hanclass_bioinfor_web">
             <q-btn flat label="前端仓库" class="text-grey-1" />
           </a>

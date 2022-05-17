@@ -3,6 +3,8 @@
 import { service, setToken } from "./request.js";
 
 const userUrl = 'user'
+const seqUrl = 'seq'
+const seqBlastUrl = 'blast'
 const geneUrl = 'gene'
 
 export const resetToken = setToken
@@ -30,29 +32,48 @@ export const userDelete = (user_id) => {
     return service.delete(`${userUrl}/${user_id}`)
 }
 
-/****************** 基因数据管理 **********************/
-// 基因列表
-export const geneList = (params = null /* 筛选参数 */) => {
+/****************** 序列数据管理 **********************/
+// 序列列表
+export const seqList = (params = null /* 筛选参数 */) => {
     // console.log(params)
-    return service.get(geneUrl, { params })
+    return service.get(seqUrl, { params })
 }
-// 基因条目的集合查询
-export const geneSummary = () => {
-    return service.get(`${geneUrl}/summary`)
+// 序列条目的集合查询
+export const seqSummary = () => {
+    return service.get(`${seqUrl}/summary`)
 }
-// 基因条目的数量
-export const geneCount = () => {
-    return service.get(`${geneUrl}/count`)
+// 序列条目的数量
+export const seqCount = () => {
+    return service.get(`${seqUrl}/count`)
 }
-// 添加基因信息
-export const geneCreate = (data) => {
+// 添加序列信息
+export const seqCreate = (data) => {
     // console.log(data)
-    return service.post(geneUrl, data)
+    return service.post(seqUrl, data)
 }
-// 更新(修改)基因信息
-// 删除基因信息
-export const geneDelete = (gene_id) => {
+// 更新(修改)序列信息
+export const seqUpdate = (data, seq_id) => {
+    console.log(data)
+    console.log(seq_id)
+    return service.put(`${seqUrl}/${seq_id}`, data)
+} 
+// 删除序列信息
+export const seqDelete = (seq_id) => {
     // console.log(data)
-    return service.delete(`${geneUrl}/${gene_id}`)
+    return service.delete(`${seqUrl}/${seq_id}`)
 }
 
+
+/******************  *****************/
+// blast
+export const seqBlast = (data) => {
+    return service.post(`${seqBlastUrl}`, data)
+}
+// gene express
+export const geneList = () => {
+    return service.get(`${geneUrl}`)
+}
+// gene express
+export const geneExp = (data) => {
+    return service.post(`${geneUrl}`, data)
+}

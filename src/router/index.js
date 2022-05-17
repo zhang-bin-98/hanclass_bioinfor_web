@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import { storeToRefs } from "pinia";
 import { mainStore } from "@/store/index"
 
 // pages
@@ -9,10 +8,12 @@ const NotFound = () => import("@/pages/Base404.vue")
 const UserLogin = () => import("@/pages/UserLogin.vue")
 const UserMessage = () => import("@/pages/UserMessage.vue")
 
-const GeneList = () => import("@/pages/GeneList.vue")
-const GeneUpload = () => import("@/pages/GeneUpload.vue")
+const SeqList = () => import("@/pages/SeqList.vue")
+const SeqUpload = () => import("@/pages/SeqUpload.vue")
 
-const About = () => import("@/pages/About.vue")
+const SeqBlast = () => import('@/pages/SeqBlast.vue')
+
+const GeneExp = () => import('@/pages/GeneExp/index.vue')
 
 const routes = [
     {
@@ -36,23 +37,28 @@ const routes = [
         component: UserMessage,
         meta: { requiresAuth: true }
     },
-    // gene
+    // seq
     {
-        path: "/GeneList",
-        name: "GeneList",
-        component: GeneList
+        path: "/SeqList",
+        name: "SeqList",
+        component: SeqList
     },
     {
-        path: "/GeneUpload",
-        name: "GeneUpload",
-        component: GeneUpload,
+        path: "/SeqUpload",
+        name: "SeqUpload",
+        component: SeqUpload,
         meta: { requiresAuth: true }
     },
-    // About
     {
-        path: "/About",
-        name: "About",
-        component: About
+        path: "/SeqBlast",
+        name: "SeqBlast",
+        component: SeqBlast
+    },
+    // gene
+    {
+        path: "/GeneExp",
+        name: "GeneExp",
+        component: GeneExp
     },
     // 404
     {

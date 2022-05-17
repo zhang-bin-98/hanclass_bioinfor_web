@@ -107,7 +107,7 @@
                 :rows="rows"
                 :columns="columns"
                 :filter="filter"
-                row-key="gene_id"
+                row-key="seq_id"
                 :visible-columns="visibleColumns"
                 :loading="loading"
                 :grid="gridView"
@@ -128,7 +128,7 @@
                         dense
                         options-dense
                         color="secondary"
-                        style="min-width: 150px; max-width: 50vw;"
+                        style="min-width: 150px max-width: 50vw"
                         emit-value
                         map-options
                         v-model="visibleColumns"
@@ -161,7 +161,7 @@
 
                 <template v-slot:body-cell-quality_assessment="props">
                     <q-td :props="props">
-                        <div style="width: 8.5em;" />
+                        <div style="width: 8.5em" />
                         <q-rating
                             readonly
                             v-model="rating"
@@ -171,8 +171,8 @@
                                     .split('/')
                                     .map(i => {
                                         switch (i) {
-                                            case '0': return 'green-10';
-                                            case '-': return 'deep-orange-13';
+                                            case '0': return 'green-10'
+                                            case '-': return 'deep-orange-13'
                                             default: return 'grey-5'
                                         }
                                     })
@@ -205,7 +205,7 @@
                                     && (user.user_role == 0
                                         || user.user_id == props.row.user_id)
                                 "
-                                @click="removeGene(props)"
+                                @click="removeSeq(props)"
                             >
                                 <q-tooltip>删除</q-tooltip>
                             </q-btn>
@@ -216,7 +216,7 @@
                 <template v-slot:item="props">
                     <div
                         class="q-pa-xs col-12 col-lg-6 grid-style-transition"
-                        :style="props.selected ? 'transform: scale(0.95);' : ''"
+                        :style="props.selected ? 'transform: scale(0.95)' : ''"
                     >
                         <q-card :class="props.selected ? 'bg-grey-2' : ''">
                             <q-card-section>
@@ -232,11 +232,23 @@
                                     <q-item-section>
                                         <q-item-label>{{ col.label }}</q-item-label>
                                     </q-item-section>
-                                    <q-item-section side style="max-width: 60%;">
+                                    <q-item-section side style="max-width: 60%">
                                         <q-item-label
                                             caption
                                             v-if="col.name != 'action'"
-                                        >{{ col.value }}</q-item-label>
+                                        >{{ col.value }}
+                                            <q-popup-edit 
+                                                v-model="props.row[col.name]" 
+                                                v-slot="scope"
+                                                v-if="user
+                                                    && (user.user_role == 0
+                                                        || user.user_id == props.row.user_id)
+                                                "
+                                                buttons
+                                            >
+                                                <q-input v-model="scope.value" dense autofocus counter />
+                                            </q-popup-edit>
+                                        </q-item-label>
                                         <q-btn-group v-else flat stretch>
                                             <q-btn
                                                 flat
@@ -251,6 +263,19 @@
                                                 flat
                                                 round
                                                 dense
+                                                icon="build"
+                                                color="deep-orange"
+                                                label="修改"
+                                                v-if="user
+                                                    && (user.user_role == 0
+                                                        || user.user_id == props.row.user_id)
+                                                "
+                                                @click="changeSeq(props)"
+                                            />
+                                            <q-btn
+                                                flat
+                                                round
+                                                dense
                                                 icon="delete"
                                                 color="deep-orange-10"
                                                 label="删除"
@@ -258,7 +283,7 @@
                                                     && (user.user_role == 0
                                                         || user.user_id == props.row.user_id)
                                                 "
-                                                @click="removeGene(props)"
+                                                @click="removeSeq(props)"
                                             />
                                         </q-btn-group>
                                     </q-item-section>
@@ -280,10 +305,10 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { geneList, geneDelete, geneSummary } from '@/api/apis.js'
-import { storeToRefs } from "pinia";
+import { seqList, seqDelete, seqUpdate, seqSummary } from '@/api/apis.js'
+import { storeToRefs } from "pinia"
 import { mainStore } from "@/store/index"
-import gnenTitle from '@/assets/geneTitle.json'
+import seqTitle from '@/assets/seqTitle.json'
 
 
 const store = mainStore()
@@ -299,10 +324,10 @@ const filter = ref(null)
 // 高级检索
 let selectItems = ref(null)
 const advace = reactive((function () {
-    let obj = new Object();
-    gnenTitle
+    let obj = new Object()
+    seqTitle
         .filter(i => i.type)
-        .forEach(e => obj[e.name] = null);
+        .forEach(e => obj[e.name] = null)
     return obj
 })())
 
@@ -330,7 +355,7 @@ const onSubmit = () => {
 
 
 // 数据表
-const columns = gnenTitle
+const columns = seqTitle
 const rows = ref([])
 const selected = ref([])
 const gridView = ref(false)
@@ -358,7 +383,7 @@ function onRequest(props) {
     const advace = props.advace
 
     loading.value = true
-    geneList({
+    seqList({
         filter, advace, page, rowsPerPage, sortBy, descending
     })
         .then((res) => {
@@ -385,7 +410,7 @@ function onRequest(props) {
         })
 }
 
-// 基因详情
+// 序列详情
 const showDetail = (id) => {
     gridView.value = true
     filter.value = id
@@ -397,8 +422,8 @@ const hideDetail = () => {
     filter.value = null
 }
 
-// 删除基因
-const removeGene = (p) => {
+// 删除序列
+const removeSeq = (p) => {
     $q.dialog({
         title: '注意',
         message: `请确认删除: ${p.row.accession_id}`,
@@ -406,7 +431,7 @@ const removeGene = (p) => {
     }).onOk(() => {
         loading.value = true
         console.log(p.key)
-        geneDelete(p.key)
+        seqDelete(p.key)
             .then((res) => {
                 loading.value = false
                 console.log(res)
@@ -433,6 +458,47 @@ const removeGene = (p) => {
     })
 }
 
+// 修改序列
+const changeSeq = (p) => {
+    console.log(p)
+    $q.dialog({
+        title: '注意',
+        message: `请确认修改: ${p.row.accession_id}`,
+        cancel: true
+    }).onOk(() => {
+        loading.value = true
+        console.log(p.key)
+        seqUpdate({data: p.row}, p.key)
+            .then((res) => {
+                loading.value = false
+                console.log(res)
+                onRequest({
+                    pagination: pagination.value,
+                    filter: filter.value
+                })
+                $q.notify({
+                    message: '修改成功',
+                    color: 'primary',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            }).catch((err) => {
+                loading.value = false
+                console.log(err)
+                onRequest({
+                    pagination: pagination.value,
+                    filter: filter.value
+                })
+                $q.notify({
+                    message: '修改失败,请重试！',
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'announcement'
+                })
+            })
+    })
+}
+
 onMounted(() => {
     console.log(route.query)
     filter.value = route.query.q
@@ -440,7 +506,7 @@ onMounted(() => {
         pagination: pagination.value,
         filter: route.query.q
     })
-    geneSummary()
+    seqSummary()
         .then((res) => {
             console.log(res)
             selectItems.value = res.data
