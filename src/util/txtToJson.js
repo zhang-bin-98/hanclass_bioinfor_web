@@ -1,4 +1,4 @@
-import gnenTitle from '@/assets/geneTitle.json'
+import seqTitle from '@/assets/seqTitle.json'
 
 const transformer = (txt, dem) => {
     let lines = txt.split(/\r*\n/)
@@ -29,7 +29,7 @@ const transformer = (txt, dem) => {
         throw Error("accession_id字段缺失！")
 
     const columnSet = new Set(
-        gnenTitle
+        seqTitle
             .filter(i => i.name != "action")
             .map(i => i.name)
     )

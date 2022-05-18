@@ -87,13 +87,10 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
 import { storeToRefs } from "pinia";
 import { mainStore } from "@/store/index"
 
 const store = mainStore()
-const route = useRoute()
-
 const {user} = storeToRefs(store)
 
 </script>
