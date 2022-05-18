@@ -128,7 +128,7 @@
                         dense
                         options-dense
                         color="secondary"
-                        style="min-width: 150px max-width: 50vw"
+                        style="min-width: 150px; max-width: 600px"
                         emit-value
                         map-options
                         v-model="visibleColumns"
@@ -303,8 +303,8 @@
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useQuasar } from 'quasar'
+import { useRoute } from 'vue-router'
+import { useQuasar, exportFile } from 'quasar'
 import { seqList, seqDelete, seqUpdate, seqSummary } from '@/api/apis.js'
 import { storeToRefs } from "pinia"
 import { mainStore } from "@/store/index"
@@ -521,5 +521,15 @@ onMounted(() => {
             })
         })
 })
+
+// const status = exportFile('important.txt', 'Some important content')
+
+// if (status === true) {
+//   // 浏览器允许
+// }
+// else {
+//   // 浏览器拒绝
+//   console.log('Error: ' + status)
+// }
 
 </script>

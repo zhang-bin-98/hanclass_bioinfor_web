@@ -59,9 +59,7 @@ const getData = () => {
                 }
             ],
             lineStyle: {
-                normal: {
-                    type: 'dashed',
-                },
+                type: 'dashed',
             },
         }
     }

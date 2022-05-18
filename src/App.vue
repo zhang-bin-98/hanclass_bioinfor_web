@@ -12,7 +12,7 @@
       "
     >
       <q-toolbar>
-        <q-toolbar-title>2019中国新冠肺炎信息数据库</q-toolbar-title>
+        <q-toolbar-title>新冠肺炎信息数据库</q-toolbar-title>
 
         <q-space />
 
@@ -72,7 +72,7 @@
         <q-toolbar-title>51522zzwlwlbb</q-toolbar-title>
         <q-btn-group flat>
           <a href="./docs">
-            <q-btn flat label="关于网站" class="text-grey-1" />
+            <q-btn flat label="网站介绍" class="text-grey-1" />
           </a>
           <a href="https://github.com/zhang-bin-98/hanclass_bioinfor_web">
             <q-btn flat label="前端仓库" class="text-grey-1" />

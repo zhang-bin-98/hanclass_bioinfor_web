@@ -2,13 +2,13 @@
     <q-page class="q-pa-md bg-grey-1 row items-center justify-center">
         <q-card
             class="q-pa-md"
-            :class="!user.user_role && $q.screen.gt.md ? 'col-4' : 'col-11'"
+            :class="!store.user.user_role && $q.screen.gt.md ? 'col-4' : 'col-11'"
         >
             <q-table
                 title="用户信息"
                 row-key="user_id"
                 selection="multiple"
-                :grid="user.user_role ? gridView : true"
+                :grid="store.user.user_role ? gridView : true"
                 :rows="rows"
                 :loading="loading"
                 :filter="filter"
@@ -22,7 +22,7 @@
                         dense
                         debounce="300"
                         v-model="filter"
-                        v-show="user.user_role"
+                        v-show="store.user.user_role"
                         placeholder="检索"
                     >
                         <template v-slot:append>
@@ -32,7 +32,7 @@
                     <q-btn flat icon="refresh" @click="getUser">
                         <q-tooltip>刷新</q-tooltip>
                     </q-btn>
-                    <q-toggle v-show="user.user_role" v-model="gridView">
+                    <q-toggle v-show="store.user.user_role" v-model="gridView">
                         <q-tooltip>卡片/表格模式</q-tooltip>
                     </q-toggle>
                 </template>
@@ -54,7 +54,7 @@
                 <template v-slot:item="props">
                     <div
                         class="q-pa-xs col-xs-12 grid-style-transition"
-                        :class="user.user_role ? 'col-md-4 col-lg-2' : ''"
+                        :class="store.user.user_role ? 'col-md-4 col-lg-2' : ''"
                         :style="props.selected ? 'transform: scale(0.95);' : ''"
                     >
                         <q-card :class="props.selected ? 'bg-grey-2' : ''">
@@ -106,18 +106,16 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeMount } from 'vue'
+import { ref, onMounted } from 'vue'
 import { userDelete, resetToken, userList } from '@/api/apis.js'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-import { storeToRefs } from "pinia";
 import { mainStore } from "@/store/index"
 import { columns } from "@/assets/userTitle.js"
 
 const $q = useQuasar()
 const router = useRouter()
 const store = mainStore()
-const {user} = storeToRefs(store)
 
 
 const filter = ref(null)
@@ -134,12 +132,12 @@ const initialPagination = ref({
 const rows = ref([])
 
 const getUser = () => {
-    // console.log(user)
+    console.log(store.user.user_role)
     loading.value = true
     userList(
-        user.user_role == 1
+        store.user.user_role == 1
             ? null
-            : user.user_id)
+            : store.user.user_id)
         .then((res) => {
             loading.value = false
             console.log(res)
