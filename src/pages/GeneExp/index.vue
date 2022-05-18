@@ -29,9 +29,9 @@
             <q-separator />
 
             <q-card-actions>
-                <q-input filled lazy-rules type="number" label="padj" color="secondary" v-model="padj" />
+                <q-input filled lazy-rules type="number" label="padj" color="secondary" v-model.number="padj" />
                 <q-input filled lazy-rules type="number" label="log2FoldChange" color="secondary"
-                    v-model="log2FoldChange" />
+                    v-model.number="log2FoldChange" />
                 <q-space />
                 <q-btn flat color="secondary" label="清空选择" sizze="xl" @click="selected = []" />
             </q-card-actions>
