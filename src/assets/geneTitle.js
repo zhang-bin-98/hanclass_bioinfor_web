@@ -1,5 +1,3 @@
-import { format } from "echarts";
-
 export const columns = [
     {
         name: 'gene_id', 
@@ -16,17 +14,12 @@ export const columns = [
         sortable: true
     },
     {
-        name: 'log2_fold_change', 
-        label: 'log2_fold_change', 
-        field: 'log2_fold_change', 
+        name: 'log2FoldChange', 
+        label: 'log2FoldChange', 
+        field: 'log2FoldChange', 
         align: 'left', 
         sortable: true,
-        format: v => Number(v).toFixed(2),
-        classes: r => r.padj < 0.05 && r.log2_fold_change > 0.5
-            ? "text-red"
-            : r.padj < 0.05 && r.log2_fold_change < -0.5
-            ? "text-green"
-            : "text-grey"
+        format: v => Number(v).toFixed(2)
     },
     {
         name: 'pvalue', 
